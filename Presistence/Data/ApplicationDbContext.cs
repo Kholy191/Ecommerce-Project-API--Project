@@ -10,9 +10,9 @@ namespace Presistence.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        DbSet<Product> Products { get; set; }
-        DbSet<ProductType> ProductTypes { get; set; }
-        DbSet<ProductBrand> ProductBrands { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<ProductBrand> ProductBrands { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }

@@ -1,5 +1,7 @@
 
+using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Presistence;
 
 namespace Web_Api_Application
 {
@@ -18,8 +20,16 @@ namespace Web_Api_Application
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddSwaggerGen();
-
+            
+            builder.Services.AddScoped<IDataSeeding, DataSeeding>();
+            
             var app = builder.Build();
+
+            using(var Scope = app.Services.CreateScope())
+            {
+                var dataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
+                dataSeeding.SeedData();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
