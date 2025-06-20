@@ -8,6 +8,6 @@ namespace Domain.Contracts
 {
     public interface IDataSeeding
     {
-        public void SeedData();
+        public Task SeedDataAsync();
     }
 }

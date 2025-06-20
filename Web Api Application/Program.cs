@@ -28,7 +28,7 @@ namespace Web_Api_Application
             using(var Scope = app.Services.CreateScope())
             {
                 var dataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-                dataSeeding.SeedData();
+                dataSeeding.SeedDataAsync();
             }
 
             // Configure the HTTP request pipeline.
