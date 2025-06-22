@@ -2,6 +2,10 @@
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presistence;
+using Presistence.UnitOfWork;
+using ServiceAbstraction;
+using Services;
+using Services.AutoMapperProfile;
 
 namespace Web_Api_Application
 {
@@ -22,7 +26,10 @@ namespace Web_Api_Application
             builder.Services.AddSwaggerGen();
             
             builder.Services.AddScoped<IDataSeeding, DataSeeding>();
-            
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
+
             var app = builder.Build();
 
             using(var Scope = app.Services.CreateScope())
