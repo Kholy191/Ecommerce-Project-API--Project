@@ -46,7 +46,7 @@ namespace Web_Api_Application
             }
 
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
 
 
