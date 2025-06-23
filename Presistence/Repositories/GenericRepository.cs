@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Contracts;
+using Domain.Contracts.SpecificationContracts;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
@@ -12,6 +13,7 @@ namespace Presistence.Repositories
 {
     public class GenericRepository<T, TK> : IGenericRepository<T, TK> where T : BaseEntity<TK>
     {
+        #region Old Repository Code
         readonly ApplicationDbContext _context;
         public GenericRepository(ApplicationDbContext context)
         {
@@ -46,10 +48,24 @@ namespace Presistence.Repositories
             }
             return entity;
         }
-
         public void Update(T entity)
         {
             _context.Set<T>().Update(entity);
+        }
+        #endregion
+
+        public async Task<IEnumerable<T>> GetAllAsync(ISpecification<T, TK> specification)
+        {
+            var query = _context.Set<T>().AsQueryable();
+            query = SpecificationEvaluation.ApplySpecification(query, specification);
+            return await query.ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(ISpecification<T, TK> specification)
+        {
+            var query = _context.Set<T>().AsQueryable();
+            query = SpecificationEvaluation.ApplySpecification(query, specification);
+            return await query.FirstOrDefaultAsync();
         }
     }
 }

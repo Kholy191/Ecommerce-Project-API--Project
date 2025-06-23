@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Contracts.SpecificationContracts;
 using Domain.Entities;
 
 namespace Domain.Contracts
@@ -14,5 +15,7 @@ namespace Domain.Contracts
         Task AddAsync(T entity);
         void Update(T entity);
         Task DeleteAsync(TK id);
+        Task<IEnumerable<T>> GetAllAsync(ISpecification<T,TK> specification);
+        Task<T> GetByIdAsync(ISpecification<T, TK> specification);
     }
 }

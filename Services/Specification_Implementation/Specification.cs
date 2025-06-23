@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using Domain.Contracts.SpecificationContracts;
+using Domain.Entities;
+
+namespace Services.Specification_Implementation
+{
+    public class Specification<T, TK> : ISpecification<T, TK> where T : BaseEntity<TK>
+    {
+        public Specification(Expression<Func<T, bool>> _criteria)
+        {
+            Criteria = _criteria;
+        }
+
+        public Expression<Func<T, bool>> Criteria { get; private set; }
+
+        public List<Expression<Func<T, object>>> Includes { get; } = [];
+
+        public void AddInclude(Expression<Func<T, object>> includeExpression)
+        {
+            Includes.Add(includeExpression);
+        }
+    }
+}

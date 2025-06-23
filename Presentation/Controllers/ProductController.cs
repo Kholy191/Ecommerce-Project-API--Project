@@ -20,14 +20,14 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts(int? BrandId, int? TypeId)
         {
-            var products = await serviceManager.ProductService.GetAllProductsAsync(); // Consider using async/await properly
+            var products = await serviceManager.ProductService.GetAllProductsAsync(BrandId, TypeId); // Consider using async/await properly
             if (products == null || !products.Any())
             {
                 return NotFound("No products found.");
             }
-            return Ok(products); 
+            return Ok(products);
         }
 
         [HttpGet("{Id:int}")]
