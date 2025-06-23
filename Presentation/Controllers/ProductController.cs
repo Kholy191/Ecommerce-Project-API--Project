@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
 using Shared.DatatoObject_Dtos_;
+using Shared.QueryModels;
 
 namespace Presentation.Controllers
 {
@@ -20,9 +21,9 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts(int? BrandId, int? TypeId)
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts([FromQuery]ProductQueryData productQueryData)
         {
-            var products = await serviceManager.ProductService.GetAllProductsAsync(BrandId, TypeId); // Consider using async/await properly
+            var products = await serviceManager.ProductService.GetAllProductsAsync(productQueryData); // Consider using async/await properly
             if (products == null || !products.Any())
             {
                 return NotFound("No products found.");

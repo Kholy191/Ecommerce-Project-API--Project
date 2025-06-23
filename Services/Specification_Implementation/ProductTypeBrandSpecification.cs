@@ -6,18 +6,37 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Contracts.SpecificationContracts;
 using Domain.Entities;
+using Shared.QueryModels;
 
 namespace Services.Specification_Implementation
 {
     internal class ProductTypeBrandSpecification : Specification<Product, int>
     {
-        public ProductTypeBrandSpecification(int? TypeId, int? BrandId) : 
+        public ProductTypeBrandSpecification(ProductQueryData ProductQueryData) : 
             base(p => 
-            (!BrandId.HasValue || p.BrandId == BrandId.Value) &&
-            (!TypeId.HasValue || p.TypeId == TypeId.Value))
+            (!ProductQueryData.BrandId.HasValue || p.BrandId == ProductQueryData.BrandId.Value) &&
+            (!ProductQueryData.TypeId.HasValue || p.TypeId == ProductQueryData.TypeId.Value) 
+            && (string.IsNullOrWhiteSpace(ProductQueryData.searchName) || p.Name.ToLower().Contains(ProductQueryData.searchName.ToLower())))
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
+            switch(ProductQueryData.sortingBase)
+            {
+                case SortingBase.PriceAsc:
+                    SetOrderBy(p => p.Price);
+                    break;
+                case SortingBase.PriceDesc:
+                    SetOrderByDescending(p => p.Price);
+                    break;
+                case SortingBase.NameAsc:
+                    SetOrderBy(p => p.Name);
+                    break;
+                case SortingBase.NameDesc:
+                    SetOrderByDescending(p => p.Name);
+                    break;
+                default:
+                    break;
+            }
         }
         public ProductTypeBrandSpecification(int Id) : base(P=>P.Id == Id)
         {

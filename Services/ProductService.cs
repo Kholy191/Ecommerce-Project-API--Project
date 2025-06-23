@@ -9,6 +9,7 @@ using Domain.Entities;
 using ServiceAbstraction;
 using Services.Specification_Implementation;
 using Shared.DatatoObject_Dtos_;
+using Shared.QueryModels;
 
 namespace Services
 {
@@ -22,10 +23,10 @@ namespace Services
             mapper = _mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(int? BrandId, int? TypeId)
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryData productQueryData)
         {
             var pRepo = _unitOfWork.GetRepository<Product, int>();
-            var products = await pRepo.GetAllAsync(new ProductTypeBrandSpecification(TypeId, BrandId)); // Consider using async/await properly
+            var products = await pRepo.GetAllAsync(new ProductTypeBrandSpecification(productQueryData)); // Consider using async/await properly
             var ProductsDto = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
             return ProductsDto;
         }

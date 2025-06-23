@@ -16,6 +16,14 @@ namespace Presistence
             {
                 query = query.Where(specification.Criteria);
             }
+            if (specification.OrderBy != null)
+            {
+                query = query.OrderBy(specification.OrderBy);
+            }
+            if (specification.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(specification.OrderByDescending);
+            }
             foreach (var include in specification.Includes)
             {
                 query = query.Include(include);

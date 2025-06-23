@@ -11,6 +11,7 @@ namespace Services.Specification_Implementation
 {
     public class Specification<T, TK> : ISpecification<T, TK> where T : BaseEntity<TK>
     {
+        #region Includes
         public Specification(Expression<Func<T, bool>> _criteria)
         {
             Criteria = _criteria;
@@ -20,9 +21,26 @@ namespace Services.Specification_Implementation
 
         public List<Expression<Func<T, object>>> Includes { get; } = [];
 
+
         public void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
         }
+        #endregion
+
+        #region Ordering
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+
+        public Expression<Func<T, object>> OrderByDescending { get; private set; }
+
+        public void SetOrderBy(Expression<Func<T, object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+        public void SetOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
+        {
+            OrderByDescending = orderByDescendingExpression;
+        }
+        #endregion 
     }
 }
