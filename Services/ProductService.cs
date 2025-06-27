@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
-using Domain.Entities;
+using Domain.Entities.ProductEntities;
 using ServiceAbstraction;
 using Services.Exceptions_Implementation;
 using Services.Specification_Implementation;
-using Shared.DatatoObject_Dtos_;
+using Shared.DatatoObject_Dtos_.ProductDtos;
 using Shared.PaginatedModel;
 using Shared.QueryModels;
 

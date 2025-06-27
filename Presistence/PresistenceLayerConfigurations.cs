@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presistence;
+using Presistence.Repositories;
 using Presistence.UnitOfWork;
 using ServiceAbstraction;
 using Services.AutoMapperProfile;
+using StackExchange.Redis;
 
 namespace Services
 {
@@ -23,6 +25,11 @@ namespace Services
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             Services.AddScoped<IDataSeeding, DataSeeding>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            Services.AddScoped<IBasketRepository, BasketRepository>();
+            Services.AddSingleton<IConnectionMultiplexer>( (_) =>
+            {
+                return ConnectionMultiplexer.Connect(_configuration.GetConnectionString("RedisConnection"));
+            });
             return Services;
         }
     }

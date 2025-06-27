@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.ProductEntities;
 using Microsoft.Extensions.Configuration;
-using Shared.DatatoObject_Dtos_;
+using Shared.DatatoObject_Dtos_.ProductDtos;
 
 namespace Services.AutoMapperProfile
 {

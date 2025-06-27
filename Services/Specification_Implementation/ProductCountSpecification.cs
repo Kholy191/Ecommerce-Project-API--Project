@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities.ProductEntities;
 using Shared.QueryModels;
 
 namespace Services.Specification_Implementation
 {
-    public class ProductCountSpecification : Specification<Domain.Entities.Product, int>
+    public class ProductCountSpecification : Specification<Product, int>
     {
         public ProductCountSpecification(ProductQueryData ProductQueryData) :
             base(p =>

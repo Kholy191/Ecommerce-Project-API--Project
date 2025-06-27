@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
-using Shared.DatatoObject_Dtos_;
+using Shared.DatatoObject_Dtos_.ProductDtos;
 using Shared.PaginatedModel;
 using Shared.QueryModels;
 

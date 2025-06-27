@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Shared.DatatoObject_Dtos_;
+using Shared.DatatoObject_Dtos_.ProductDtos;
 using Shared.PaginatedModel;
 using Shared.QueryModels;
 

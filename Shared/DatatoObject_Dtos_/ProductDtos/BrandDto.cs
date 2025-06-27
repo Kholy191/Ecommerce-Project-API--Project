@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.DatatoObject_Dtos_
+namespace Shared.DatatoObject_Dtos_.ProductDtos
 {
     public class BrandDto
     {

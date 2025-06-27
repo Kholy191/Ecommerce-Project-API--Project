@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Contracts;
-using Domain.Entities;
+using Domain.Entities.ProductEntities;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
 

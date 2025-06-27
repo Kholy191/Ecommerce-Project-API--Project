@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.DatatoObject_Dtos_
+namespace Domain.Entities.ProductEntities
 {
-    public class ProductTypeDto
+    public class ProductType : BaseEntity<int>
     {
-        public int Id { get; set; }
         public string Name { get; set; }
     }
 }
