@@ -41,6 +41,18 @@ namespace Services.Specification_Implementation
         {
             OrderByDescending = orderByDescendingExpression;
         }
-        #endregion 
+        #endregion
+
+        #region Pagination
+        public int? Take { get; private set; }
+        public int Skip { get; private set; }
+        public bool IsPagingEnabled { get; set; }
+        public void ApplyPaging(int skip, int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPagingEnabled = true;
+        }
+        #endregion
     }
 }

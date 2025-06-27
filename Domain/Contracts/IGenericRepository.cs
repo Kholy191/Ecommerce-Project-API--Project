@@ -17,5 +17,6 @@ namespace Domain.Contracts
         Task DeleteAsync(TK id);
         Task<IEnumerable<T>> GetAllAsync(ISpecification<T,TK> specification);
         Task<T> GetByIdAsync(ISpecification<T, TK> specification);
+        Task<int> CountAsync(ISpecification<T, TK> specification);
     }
 }

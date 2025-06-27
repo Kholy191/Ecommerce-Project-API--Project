@@ -1,5 +1,6 @@
 
 using Domain.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Presistence;
 using Presistence.UnitOfWork;
@@ -29,15 +30,34 @@ namespace Web_Api_Application
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+            builder.Services.Configure<ApiBehaviorOptions>(ApiBehaviorOptions => 
+            {
+                ApiBehaviorOptions.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .Select(e => new ErrorModels.ValidationError
+                        {
+                            Key = e.Key,
+                            Errors = e.Value.Errors.Select(x => x.ErrorMessage).ToArray()
+                        }).ToArray();
+                    var Error = new ErrorModels.ValidationErrorToReturn
+                    {
+                        Errors = errors,
+                    };
+                    return new BadRequestObjectResult(Error);
+                };
+            });
 
             var app = builder.Build();
 
-            using(var Scope = app.Services.CreateScope())
+            app.UseMiddleware<Web_Api_Application.CustomMiddlewares.CustomExceptionMiddleware>();
+
+            using (var Scope = app.Services.CreateScope())
             {
                 var dataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
                 dataSeeding.SeedDataAsync();
             }
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

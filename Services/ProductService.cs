@@ -7,8 +7,10 @@ using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
 using ServiceAbstraction;
+using Services.Exceptions_Implementation;
 using Services.Specification_Implementation;
 using Shared.DatatoObject_Dtos_;
+using Shared.PaginatedModel;
 using Shared.QueryModels;
 
 namespace Services
@@ -23,18 +25,30 @@ namespace Services
             mapper = _mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryData productQueryData)
+        public async Task<GeneralPaginatedModel<ProductDto>> GetAllProductsAsync(ProductQueryData productQueryData)
         {
             var pRepo = _unitOfWork.GetRepository<Product, int>();
             var products = await pRepo.GetAllAsync(new ProductTypeBrandSpecification(productQueryData)); // Consider using async/await properly
             var ProductsDto = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
-            return ProductsDto;
+            ProductCountSpecification productCountSpecification = new ProductCountSpecification(productQueryData);
+            var totalCount = await pRepo.CountAsync(productCountSpecification); // Consider using async/await properly
+
+            GeneralPaginatedModel<ProductDto> paginatedProducts = new GeneralPaginatedModel<ProductDto>(productQueryData.PageIndex.GetValueOrDefault(),
+                ProductsDto.Count(), totalCount)
+            {
+                Items = ProductsDto
+            };
+            return paginatedProducts;
         }
         public async Task<ProductDto> GetProductByIdAsync(int id)
         {
             var pRepo = _unitOfWork.GetRepository<Product, int>();
             var product = await pRepo.GetByIdAsync(new ProductTypeBrandSpecification(id)); // Consider using async/await properly
             var ProductDto = mapper.Map<Product, ProductDto>(product);
+            if (ProductDto == null)
+            {
+                throw new NoProductFoundException(id); // Custom exception for not found product
+            }
             return ProductDto;
         }
         public async Task<IEnumerable<BrandDto>> GetAllProductBrandsAsync()

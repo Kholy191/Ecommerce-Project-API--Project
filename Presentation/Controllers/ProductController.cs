@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
 using Shared.DatatoObject_Dtos_;
+using Shared.PaginatedModel;
 using Shared.QueryModels;
 
 namespace Presentation.Controllers
@@ -21,10 +22,11 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProducts([FromQuery]ProductQueryData productQueryData)
+        public async Task<ActionResult<GeneralPaginatedModel<ProductDto>>> GetAllProducts([FromQuery]ProductQueryData productQueryData)
         {
+            //throw new NotImplementedException("This method is not implemented yet. Please implement it before using it.");
             var products = await serviceManager.ProductService.GetAllProductsAsync(productQueryData); // Consider using async/await properly
-            if (products == null || !products.Any())
+            if (products == null || !products.Items.Any())
             {
                 return NotFound("No products found.");
             }

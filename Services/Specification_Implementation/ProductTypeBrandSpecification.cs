@@ -37,6 +37,10 @@ namespace Services.Specification_Implementation
                 default:
                     break;
             }
+            if (ProductQueryData.Take.HasValue && ProductQueryData.Take.Value > 0)
+            {
+                ApplyPaging(ProductQueryData.PageIndex.GetValueOrDefault(defaultValue: 0) * ProductQueryData.Take.Value, ProductQueryData.Take.Value);
+            }
         }
         public ProductTypeBrandSpecification(int Id) : base(P=>P.Id == Id)
         {

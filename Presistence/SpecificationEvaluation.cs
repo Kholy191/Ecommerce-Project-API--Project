@@ -24,6 +24,10 @@ namespace Presistence
             {
                 query = query.OrderByDescending(specification.OrderByDescending);
             }
+            if (specification.IsPagingEnabled)
+            {
+                query = query.Skip(specification.Skip).Take(specification.Take ?? 10); // Default take to 10 if not specified
+            }
             foreach (var include in specification.Includes)
             {
                 query = query.Include(include);
