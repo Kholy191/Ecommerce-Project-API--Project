@@ -17,19 +17,17 @@ namespace Web_Api_Application
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            #region Service Configuration
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddDbContext<Presistence.Data.ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddPresistenceConfig(builder.Configuration); // Custom extension method to add persistence layer configurations
+            builder.Services.AddServiceConfig();// Custom extension method to add service layer configurations
 
             builder.Services.AddSwaggerGen();
-            
-            builder.Services.AddScoped<IDataSeeding, DataSeeding>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
+
+            #region Invalid Model State Response Factory Configuration
             builder.Services.Configure<ApiBehaviorOptions>(ApiBehaviorOptions => 
             {
                 ApiBehaviorOptions.InvalidModelStateResponseFactory = context =>
@@ -48,16 +46,24 @@ namespace Web_Api_Application
                     return new BadRequestObjectResult(Error);
                 };
             });
+            #endregion
+
+            #endregion
 
             var app = builder.Build();
 
+            #region Exception Handler Middleware Configuration
             app.UseMiddleware<Web_Api_Application.CustomMiddlewares.CustomExceptionMiddleware>();
+            #endregion
 
+            #region Data Seeding Configuration
             using (var Scope = app.Services.CreateScope())
             {
                 var dataSeeding = Scope.ServiceProvider.GetRequiredService<IDataSeeding>();
                 dataSeeding.SeedDataAsync();
             }
+            #endregion
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
