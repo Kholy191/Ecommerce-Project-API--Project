@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presistence;
+using Presistence.Identity;
 using Presistence.Repositories;
 using Presistence.UnitOfWork;
 using ServiceAbstraction;
@@ -23,6 +24,8 @@ namespace Services
         {
             Services.AddDbContext<Presistence.Data.ApplicationDbContext>(options =>
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            Services.AddDbContext<IdentityStore>(options =>
+                options.UseSqlServer(_configuration.GetConnectionString("IdentityConnection")));
             Services.AddScoped<IDataSeeding, DataSeeding>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
             Services.AddScoped<IBasketRepository, BasketRepository>();

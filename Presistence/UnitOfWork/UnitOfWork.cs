@@ -20,8 +20,7 @@ namespace Presistence.UnitOfWork
         {
             _context = context;
         }
-
-
+         
         public IGenericRepository<T, TK> GetRepository<T, TK>() where T : BaseEntity<TK>
         {
             if (_repositories.ContainsKey(typeof(T).Name))
@@ -32,7 +31,7 @@ namespace Presistence.UnitOfWork
             _repositories.Add(typeof(T).Name, repository);
             return repository;
         }
-
+         
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

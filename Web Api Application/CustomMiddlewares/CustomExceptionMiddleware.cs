@@ -1,4 +1,6 @@
-﻿using Web_Api_Application.ErrorModels;
+﻿using Domain.Exceptions;
+using Services.Exceptions_Implementation;
+using Web_Api_Application.ErrorModels;
 
 namespace Web_Api_Application.CustomMiddlewares
 {
@@ -27,24 +29,35 @@ namespace Web_Api_Application.CustomMiddlewares
 
         private async Task ExceptionsHandler(HttpContext context, Exception ex)
         {
+            var response = new ErrorModel()
+            {
+                message = ex.Message
+            };
+
             switch (ex)
             {
-                case Domain.Exceptions.NotFoundException notFoundException:
+                case NotFoundException notFoundException:
                     _logger.LogError(ex, "Not Found Exception: {Message}", ex.Message);
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
+                    break;
+                case BadRequestException badRequestException: 
+                    _logger.LogError($"BadRequest: {ex.Message}");
+                    context.Response.StatusCode = BadRequestErrorsInit(badRequestException , response);
                     break;
                 default:
                     _logger.LogError(ex, "An unexpected error occurred: {Message}", ex.Message);
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     break;
             }
-            var response = new ErrorModel()
-            {
-                statusCode = context.Response.StatusCode,
-                message = ex.Message
-            };
 
+            response.statusCode = context.Response.StatusCode;
             await context.Response.WriteAsJsonAsync(response);
+        }
+
+        private int BadRequestErrorsInit(BadRequestException badRequestException , ErrorModel response)
+        {
+            response.Errors = badRequestException.Errors;
+            return StatusCodes.Status400BadRequest;
         }
 
         private async Task NotFoundResourceHandler(HttpContext context)

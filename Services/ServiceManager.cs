@@ -5,16 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
+using Domain.Entities.IdentityEntities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using ServiceAbstraction;
 
 namespace Services
 {
-    public class ServiceManager(IMapper mapper , IUnitOfWork unitOfWork , IBasketRepository basketRepository) : IServiceManager
+    public class ServiceManager(IMapper mapper, IUnitOfWork unitOfWork, IBasketRepository basketRepository, UserManager<AppUser> _useManger, IConfiguration configuration) : IServiceManager
     {
         Lazy<IProductService> _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork, mapper));
         public IProductService ProductService => _productService.Value;
 
         Lazy<IBasketService> _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
         public IBasketService BasketService => _basketService.Value;
+
+        Lazy<IAuthenticationServices> _authenticationServices = new Lazy<IAuthenticationServices>(() => new AuthenticationService(_useManger, configuration));
+        public IAuthenticationServices AuthenticationServices => _authenticationServices.Value;
     }
 }

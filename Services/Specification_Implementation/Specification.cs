@@ -9,15 +9,15 @@ using Domain.Entities;
 
 namespace Services.Specification_Implementation
 {
-    public class Specification<T, TK> : ISpecification<T, TK> where T : BaseEntity<TK>
+    public abstract class Specification<T, TK> : ISpecification<T, TK> where T : BaseEntity<TK>
     {
         #region Includes
+        public Expression<Func<T, bool>> Criteria { get; private set; }
         public Specification(Expression<Func<T, bool>> _criteria)
         {
             Criteria = _criteria;
         }
 
-        public Expression<Func<T, bool>> Criteria { get; private set; }
 
         public List<Expression<Func<T, object>>> Includes { get; } = [];
 
