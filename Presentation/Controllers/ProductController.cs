@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
 using Shared.DatatoObject_Dtos_.ProductDtos;
@@ -13,6 +15,7 @@ namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = BearerTokenDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         readonly IServiceManager serviceManager;

@@ -1,10 +1,13 @@
 
+using System.Text;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Entities.IdentityEntities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using Presistence;
 using Presistence.Identity;
@@ -35,6 +38,26 @@ namespace Web_Api_Application
                 .AddEntityFrameworkStores<IdentityStore>(); // Configuring Identity with Entity Framework Store
 
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration.GetSection("JwtConfig")["Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration.GetSection("JwtConfig")["Audience"],
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtConfig")["SecretKey"]!)),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
 
             #region Invalid Model State Response Factory Configuration
 
@@ -82,14 +105,12 @@ namespace Web_Api_Application
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthorization();
 
 
             app.MapControllers();
-
             app.Run();
         }
     }
