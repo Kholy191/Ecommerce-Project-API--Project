@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities.OrderEntities;
 using Domain.Entities.ProductEntities;
 using Microsoft.Extensions.Configuration;
 using Shared.DatatoObject_Dtos_.ProductDtos;
@@ -21,6 +22,10 @@ namespace Services.AutoMapperProfile
 
             CreateMap<ProductBrand, BrandDto>();
             CreateMap<ProductType, ProductTypeDto>();
+            CreateMap<Product, ProductItemOrdered>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.PictureUrl, opt => opt.MapFrom(src => src.PictureUrl)).ReverseMap();
         }
     }
 }

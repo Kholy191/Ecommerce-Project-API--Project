@@ -23,5 +23,8 @@ namespace Services
 
         Lazy<IAuthenticationServices> _authenticationServices = new Lazy<IAuthenticationServices>(() => new AuthenticationService(_useManger, configuration, mapper, httpContextAccessor));
         public IAuthenticationServices AuthenticationServices => _authenticationServices.Value;
+
+        Lazy<IOrderServices> _orderServices = new Lazy<IOrderServices>(() => new OrderServices(unitOfWork , mapper, basketRepository));
+        public IOrderServices OrderServices => _orderServices.Value;
     }
 }

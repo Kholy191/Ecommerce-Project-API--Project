@@ -55,11 +55,9 @@ namespace Presistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.OrderEntities.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DeliveryMethodId")
                         .HasColumnType("int");
@@ -92,8 +90,8 @@ namespace Presistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(8,2)");
@@ -190,8 +188,8 @@ namespace Presistence.Migrations
 
                     b.OwnsOne("Domain.Entities.OrderEntities.ShippingAddress", "ShipToAddress", b1 =>
                         {
-                            b1.Property<int>("OrderId")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("OrderId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.HasKey("OrderId");
 

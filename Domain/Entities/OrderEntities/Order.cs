@@ -7,11 +7,11 @@ using Shared.Enums;
 
 namespace Domain.Entities.OrderEntities
 {
-    public class Order : BaseEntity<int>
+    public class Order : BaseEntity<Guid>
     {
         public string UserEmail { get; set; }
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
-        public OrderStatus OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public ShippingAddress ShipToAddress { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total => SubTotal + DeliveryMethod.Cost;

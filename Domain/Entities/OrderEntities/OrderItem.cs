@@ -13,7 +13,7 @@ namespace Domain.Entities.OrderEntities
         public int Quantity { get; set; }
 
         #region Navigation Properties
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public Order Order { get; set; }
         #endregion
     }

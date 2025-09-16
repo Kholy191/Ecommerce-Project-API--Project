@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Entities.BasketEntites;
 using Domain.Entities.IdentityEntities;
+using Domain.Entities.OrderEntities;
 using Shared.AddressDtos;
 using Shared.DatatoObject_Dtos_.BasketDtos;
 
@@ -16,6 +17,7 @@ namespace Services.AutoMapperProfile
         public AddressProfile()
         {
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<ShippingAddress, AddressDto>().ReverseMap();
         }
     }
 }
