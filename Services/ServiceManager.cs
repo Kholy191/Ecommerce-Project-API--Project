@@ -13,7 +13,9 @@ using ServiceAbstraction;
 
 namespace Services
 {
-    public class ServiceManager(IMapper mapper, IUnitOfWork unitOfWork, IBasketRepository basketRepository, UserManager<AppUser> _useManger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : IServiceManager
+    public class ServiceManager(IMapper mapper, IUnitOfWork unitOfWork, 
+        IBasketRepository basketRepository, UserManager<AppUser> _useManger, 
+        IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : IServiceManager
     {
         Lazy<IProductService> _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork, mapper));
         public IProductService ProductService => _productService.Value;
